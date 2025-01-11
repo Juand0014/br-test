@@ -1,4 +1,9 @@
 package org.acme.repository;
 
-public class ClientRepository {
+import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import org.acme.entity.ClientEntity;
+
+@ApplicationScoped
+public class ClientRepository implements PanacheRepository<ClientEntity> {
 }
