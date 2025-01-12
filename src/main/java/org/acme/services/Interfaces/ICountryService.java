@@ -1,4 +1,5 @@
 package org.acme.services.Interfaces;
 
-public class ICountryService {
+public interface ICountryService {
+    String getDemonymByCountry(String countryCode);
 }
