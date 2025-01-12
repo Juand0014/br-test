@@ -1,5 +1,6 @@
 package org.acme.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,29 +20,22 @@ public class CountryService implements ICountryService {
     @Override
     public String getDemonymByCountry(String countryCode) {
         try {
-            String countryJson = clientService.getCountryByCode(countryCode);
+            String country = clientService.getCountryByCode(countryCode);
 
-            if (countryJson == null || countryJson.isEmpty()) {
-                throw new NoSuchElementException("No country found for code: " + countryCode);
+            if(country == null){
+                throw new NoSuchElementException("No fue encontrado el pais con el siguiente codigo: " + countryCode);
             }
 
             ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readTree(countryJson);
 
-            if (!rootNode.isArray()) {
-                throw new IllegalArgumentException("Unexpected JSON format");
-            }
+            JsonNode rootNode = mapper.readTree(country);
 
-            JsonNode countryNode = rootNode.get(0);
-            JsonNode demonymsNode = countryNode.path("demonyms").path("eng").path("f");
+            JsonNode demonymsNode = rootNode.get(0).get("demonyms");
 
-            if (demonymsNode.isMissingNode()) {
-                throw new NoSuchElementException("Demonym not found in response");
-            }
+            return demonymsNode.get("eng").get("f").asText();
 
-            return demonymsNode.asText();
-        } catch (Exception e) {
-            return "Error retrieving demonym: " + e.getMessage();
+        } catch (JsonProcessingException e) {
+            return null;
         }
     }
 }

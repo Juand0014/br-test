@@ -4,8 +4,13 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.smallrye.common.constraint.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "clients")
 public class ClientEntity extends PanacheEntity {
 
@@ -15,7 +20,6 @@ public class ClientEntity extends PanacheEntity {
 
     @Nullable
     public String middleName;
-
 
     @NotNull
     public String firstLastName;
@@ -27,7 +31,6 @@ public class ClientEntity extends PanacheEntity {
     public String email;
 
     @NotNull
-    @Column(unique = true)
     public String address;
 
     @NotNull
