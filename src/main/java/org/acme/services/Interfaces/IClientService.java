@@ -16,4 +16,6 @@ public interface IClientService {
     ClientEntity updateClient(Long Id, UpdateEntityDto client);
 
     void deleteClient(Long Id);
+
+    List<ClientEntity> getClientsByCountry(String countryCode);
 }

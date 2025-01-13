@@ -92,6 +92,9 @@ EXPOSE 8080
 USER 185
 ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
 ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
+ENV QUARKUS_DATASOURCE_JDBC_URL="jdbc:postgresql://postgres:5432/clientesdb"
+ENV QUARKUS_DATASOURCE_USERNAME="postgres"
+ENV QUARKUS_DATASOURCE_PASSWORD="admin"
 
 ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
 

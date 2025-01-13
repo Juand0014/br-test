@@ -37,6 +37,7 @@ public class ClientService implements IClientService {
         ClientEntity clientEntity = new ClientEntity();
 
         clientEntity.setFirstName(client.firstName());
+        clientEntity.setMiddleName(client.middleName());
         clientEntity.setFirstLastName(client.firstLastName());
         clientEntity.setEmail(client.email());
         clientEntity.setAddress(client.address());
@@ -77,5 +78,9 @@ public class ClientService implements IClientService {
 
     public void deleteClient(Long Id) {
         clientRepository.deleteById(Id);
+    }
+
+    public List<ClientEntity> getClientsByCountry(String countryCode) {
+        return clientRepository.findByCountry(countryCode);
     }
 }

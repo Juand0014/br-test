@@ -51,4 +51,11 @@ public class ClientResource {
         clientService.deleteClient(id);
         return Response.noContent().build();
     }
+
+    @GET
+    @Path("/pais/{countryCode}")
+    public Response getClientsByCountry(@PathParam("countryCode") String countryCode) {
+        List<ClientEntity> clients = clientService.getClientsByCountry(countryCode);
+        return Response.ok(clients).build();
+    }
 }
