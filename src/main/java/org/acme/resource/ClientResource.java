@@ -53,7 +53,7 @@ public class ClientResource {
     }
 
     @GET
-    @Path("/pais/{countryCode}")
+    @Path("/country/{countryCode}")
     public Response getClientsByCountry(@PathParam("countryCode") String countryCode) {
         List<ClientEntity> clients = clientService.getClientsByCountry(countryCode);
         return Response.ok(clients).build();
