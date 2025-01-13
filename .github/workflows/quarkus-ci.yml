@@ -1,3 +1,5 @@
+## A basic GitHub Actions workflow for your Quarkus application.
+
 name: CI build
 
 on:
