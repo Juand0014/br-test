@@ -42,7 +42,7 @@ public class ClientService implements IClientService {
         clientEntity.setEmail(client.email());
         clientEntity.setAddress(client.address());
         clientEntity.setPhoneNumber(client.phoneNumber());
-        clientEntity.setCountryCode(client.countryCode());
+        clientEntity.setCountryCode(client.countryCode().toUpperCase());
 
         clientEntity.demonym = countryService.getDemonymByCountryCode(clientEntity.countryCode);
 
@@ -67,7 +67,7 @@ public class ClientService implements IClientService {
         clientEntity.setAddress(client.address());
         clientEntity.setEmail(client.email());
         clientEntity.setPhoneNumber(client.phoneNumber());
-        clientEntity.setCountryCode(client.countryCode());
+        clientEntity.setCountryCode(client.countryCode().toUpperCase());
 
         clientEntity.demonym = countryService.getDemonymByCountryCode(client.countryCode());
 
@@ -81,6 +81,6 @@ public class ClientService implements IClientService {
     }
 
     public List<ClientEntity> getClientsByCountry(String countryCode) {
-        return clientRepository.findByCountry(countryCode);
+        return clientRepository.findByCountry(countryCode.toUpperCase());
     }
 }
