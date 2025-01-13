@@ -40,7 +40,7 @@ public class ClientResource {
     @PUT
     @Transactional
     @Path("/{id}")
-    public ClientEntity updateClient(@PathParam("id") Long id, UpdateEntityDto clientEntity) {
+    public ClientEntity updateClient(@PathParam("id") Long id, @Valid UpdateEntityDto clientEntity) {
         return clientService.updateClient(id, clientEntity);
     }
 

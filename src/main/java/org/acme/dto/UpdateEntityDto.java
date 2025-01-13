@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 public record UpdateEntityDto(
         @NotBlank
-        @Email
+        @Email(message = "must be a well-formed email address")
         @Size(max = 50)
         String email,
 

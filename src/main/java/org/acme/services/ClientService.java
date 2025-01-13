@@ -2,7 +2,6 @@ package org.acme.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import org.acme.dto.CreateClientDto;
@@ -10,12 +9,13 @@ import org.acme.dto.UpdateEntityDto;
 import org.acme.entity.ClientEntity;
 import org.acme.exceptions.ClientValidator;
 import org.acme.repository.ClientRepository;
+import org.acme.services.Interfaces.IClientService;
 import org.acme.services.Interfaces.ICountryService;
 
 import java.util.List;
 
 @ApplicationScoped
-public class ClientService {
+public class ClientService implements IClientService {
 
     @Inject
     ClientRepository clientRepository;
@@ -43,7 +43,7 @@ public class ClientService {
         clientEntity.setPhoneNumber(client.phoneNumber());
         clientEntity.setCountryCode(client.countryCode());
 
-        clientEntity.demonym = countryService.getDemonymByCountry(clientEntity.countryCode);
+        clientEntity.demonym = countryService.getDemonymByCountryCode(clientEntity.countryCode);
 
         clientRepository.persist(clientEntity);
 
@@ -68,7 +68,7 @@ public class ClientService {
         clientEntity.setPhoneNumber(client.phoneNumber());
         clientEntity.setCountryCode(client.countryCode());
 
-        clientEntity.demonym = countryService.getDemonymByCountry(client.countryCode());
+        clientEntity.demonym = countryService.getDemonymByCountryCode(client.countryCode());
 
         clientRepository.persist(clientEntity);
 

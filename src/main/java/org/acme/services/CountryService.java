@@ -15,12 +15,12 @@ public class CountryService implements ICountryService {
 
     @Inject
     @RestClient
-    IClientService clientService;
+    ICountryCodeService countryCodeService;
 
     @Override
-    public String getDemonymByCountry(String countryCode) {
+    public String getDemonymByCountryCode(String countryCode) {
         try {
-            String country = clientService.getCountryByCode(countryCode);
+            String country = countryCodeService.getCountryByCode(countryCode);
 
             if(country == null){
                 throw new NoSuchElementException("No fue encontrado el pais con el siguiente codigo: " + countryCode);

@@ -1,9 +1,8 @@
 package org.acme.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import io.smallrye.common.constraint.*;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @Entity
@@ -14,31 +13,34 @@ import lombok.*;
 @Table(name = "clients")
 public class ClientEntity extends PanacheEntity {
 
-    @Column(nullable = false)
-    @NotNull
+    @Column(nullable = false, length = 15)
     public String firstName;
 
-    @Nullable
+    @Column(length = 10)
     public String middleName;
 
-    @NotNull
+    @Column(nullable = false, length = 10)
     public String firstLastName;
 
-    @Nullable
+    @Column(length = 10)
     public String secondLastName;
 
-    @NotNull
+    @Column(nullable = false, length = 30)
+    @Email(
+        message = "must be a well-formed email address",
+        regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"
+    )
     public String email;
 
-    @NotNull
+    @Column(nullable = false, length = 20)
     public String address;
 
-    @NotNull
+    @Column(nullable = false, length = 10)
     public String phoneNumber;
 
-    @NotNull
-    @Size(min = 2, max = 10)
+    @Column(nullable = false, length = 2)
     public String countryCode;
 
+    @Column(nullable = false, length = 10)
     public String demonym;
 }

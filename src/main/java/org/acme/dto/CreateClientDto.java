@@ -1,31 +1,33 @@
 package org.acme.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record CreateClientDto(
         @NotBlank
-        @Size(max = 20)
+        @Size(max = 15)
         String firstName,
 
-        @Size(max = 20)
+        @Size(max = 10)
         String middleName,
 
         @NotBlank
-        @Size(max = 20)
+        @Size(max = 10)
         String firstLastName,
 
-        @Size(max = 20)
+        @Size(max = 10)
         String secondLastName,
 
-        @NotBlank
+        @NotBlank(message = "Email is required")
+        @Pattern(
+                regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
+                message = "must be a well-formed email address"
+        )
         @Email
-        @Size(max = 50)
+        @Size(max = 20)
         String email,
 
         @NotBlank
-        @Size(max = 50)
+        @Size(max = 20)
         String address,
 
         @NotBlank
@@ -33,7 +35,7 @@ public record CreateClientDto(
         String phoneNumber,
 
         @NotBlank
-        @Size(max = 10)
+        @Size(max = 5)
         String countryCode
 ) {
 }
