@@ -51,7 +51,7 @@ public class ClientServicesTest {
         when(countryService.getDemonymByCountryCode(anyString())).thenReturn("American");
 
         when(clientRepository.getEntityManager()).thenReturn(entityManager);
-        when(entityManager.merge(any(ClientEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));  // ✅ Return the same entity
+        when(entityManager.merge(any(ClientEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
     }
 
     @Test
