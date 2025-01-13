@@ -1,78 +1,200 @@
-# client-test
+# 🚀 Client Management API - Quarkus + PostgreSQL
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This is a **RESTful API** built with **Quarkus** that allows efficient **client management**, including:
+- 📌 **Create, Read, Update, and Delete (CRUD) operations** for clients.
+- 🌍 **Filter clients by country**.
+- ✅ **Database migration using Flyway**.
+- 📦 **Dockerized setup with PostgreSQL**.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## 📂 Project Structure
 
-## Running the application in dev mode
+```
+📦 client-test
+├── 📂 src                     
+│   ├── 📂 main
+│   │   ├── 📂 java/org/acme   
+│   │   │   ├── 📂 dto         # Request/Response DTOs
+│   │   │   ├── 📂 entity      # JPA Entities
+│   │   │   ├── 📂 exceptions  # Custom Exception Handlers
+│   │   │   ├── 📂 repository  # Data Access Layer
+│   │   │   ├── 📂 resource    # API Controllers (REST)
+│   │   │   ├── 📂 services    # Business Logic
+│   │   ├── 📂 resources
+│   │   │   ├── 📂 db.migration  # Flyway Migrations
+│   │   │   ├── 📄 application.properties  # Configuration
+│   ├── 📂 test
+│   │   ├── 📂 java/org/acme
+│   │   │   ├── 📄 ClientResourceTest  # API Tests
+│   │   │   ├── 📄 ClientServicesTest  # Service Tests
+├── 📄 docker-compose.yml      # Docker Services
+├── 📄 Dockerfile              # Quarkus Container Image
+├── 📄 mvnw / mvnw.cmd         # Maven Wrapper
+├── 📄 pom.xml                 # Dependencies & Build Config
+└── 📄 README.md               # Documentation
+```
 
-You can run your application in dev mode that enables live coding using:
+---
 
-```shell script
+## 🔧 **Installation & Setup**
+
+### **1️⃣ Prerequisites**
+Ensure you have the following installed:
+- **Java 17+** → [Download](https://adoptopenjdk.net/)
+- **Maven 3.8+** → [Download](https://maven.apache.org/)
+- **Docker & Docker Compose** → [Install](https://docs.docker.com/engine/install/)
+
+### **2️⃣ Clone the Repository**
+```sh
+git clone https://github.com/Juand0014/client-test.git
+cd client-test
+```
+
+### **3️⃣ Configure Environment**
+Modify `application.properties` if necessary:
+```properties
+# With Docker
+quarkus.hibernate-orm.log.sql=true
+quarkus.datasource.db-kind=postgresql
+quarkus.datasource.username=postgres
+quarkus.datasource.password=admin
+quarkus.datasource.jdbc.url=postgresql://postgres:5432/clientesdb
+
+# Without Docker
+quarkus.hibernate-orm.log.sql=true
+quarkus.datasource.db-kind=postgresql
+quarkus.datasource.username=postgres
+quarkus.datasource.password=admin
+quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/clientesdb
+
+# Configuración de Hibernate ORM con Panache
+quarkus.hibernate-orm.database.generation=update
+quarkus.flyway.migrate-at-start=true
+quarkus.flyway.locations=classpath:db/migration
+
+# Rest Client
+quarkus.rest-client.rest-countries-api.url=https://restcountries.com/v3.1
+quarkus.rest-client.rest-countries-api.scope=ApplicationScoped
+
+# Configurar el host para permitir conexiones externas
+quarkus.http.host=0.0.0.0
+
+# Docker
+quarkus.container-image.build=true
+quarkus.container-image.group=quarkus
+quarkus.container-image.name=client-test-jvm
+quarkus.container-image.tag=latest
+quarkus.jib.ports=8080
+
+# Swagger Config
+quarkus.swagger-ui.always-include=true
+quarkus.smallrye-openapi.path=/q/openapi
+
+```
+
+---
+
+## 🚀 **Run the Application**
+
+### **1️⃣ Run Locally (Without Docker)**
+```sh
+./mvnw clean package
 ./mvnw quarkus:dev
 ```
+and run postgres container or configurate your local database
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
-
-## Packaging and running the application
-
-The application can be packaged using:
-
-```shell script
-./mvnw package
+```sh
+docker run --name postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=clientesdb -p 5432:5432 -d postgres
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+- API will be available at **http://localhost:8080**
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+### **2️⃣ Run with Docker Compose**
+```sh
+docker compose up --build -d
+```
+- API: **http://localhost:8080**
+- PostgreSQL: **localhost:5432**
+- Swagger UI: **http://localhost:8080/q/swagger-ui**
 
-If you want to build an _über-jar_, execute the following command:
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+
+---
+
+## 📡 **REST API Endpoints**
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/clients` | Create a new client |
+| `GET` | `/clients` | Get all clients |
+| `GET` | `/clients/{id}` | Get a client by ID |
+| `GET` | `/clients/country/{countryCode}` | Get clients by country |
+| `PUT` | `/clients/{id}` | Update client (email, phone, address, country) |
+| `DELETE` | `/clients/{id}` | Delete a client |
+
+---
+
+## ✅ **Testing**
+
+### **1️⃣ Run Unit Tests**
+```sh
+./mvnw test
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+### **2️⃣ Manual Testing with Swagger UI**
+- **Swagger UI** → [http://localhost:8080/q/swagger-ui](http://localhost:8080/q/swagger-ui)
+- **API Health Check** → [http://localhost:8080/q/health](http://localhost:8080/q/health)
 
-## Creating a native executable
+---
 
-You can create a native executable using:
+# 📌 Quarkus Client Test Project
 
-```shell script
-./mvnw package -Dnative
-```
+Este proyecto es un servicio **RESTful** basado en **Quarkus** que gestiona clientes y permite realizar operaciones **CRUD** con persistencia en **PostgreSQL**.  
+Incluye documentación en **Swagger**, validación de datos y soporte para migraciones con **Flyway**.
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+---
 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
+## 📦 **Dependencias del Proyecto**
+A continuación, se listan las dependencias utilizadas junto con su documentación oficial.
 
-You can then execute your native executable with: `./target/client-test-1.0.0-SNAPSHOT-runner`
+| Dependencia | Descripción | Documentación |
+|------------|-------------|---------------|
+| **Quarkus REST** | Implementación JAX-RS para servicios REST. | [Docs](https://quarkus.io/guides/rest-json) |
+| **Quarkus REST Jackson** | Soporte para serialización JSON con Jackson. | [Docs](https://quarkus.io/guides/rest-json#jackson) |
+| **Quarkus Hibernate ORM Panache** | Simplifica el uso de Hibernate ORM. | [Docs](https://quarkus.io/guides/hibernate-orm-panache) |
+| **Quarkus Flyway** | Manejo de migraciones de base de datos. | [Docs](https://quarkus.io/guides/flyway) |
+| **Quarkus JDBC PostgreSQL** | Conector JDBC para PostgreSQL. | [Docs](https://quarkus.io/guides/datasource) |
+| **Quarkus REST Client** | Cliente REST declarativo. | [Docs](https://quarkus.io/guides/rest-client) |
+| **Lombok** | Eliminación de código repetitivo en Java. | [Docs](https://projectlombok.org/) |
+| **Quarkus Hibernate Validator** | Validación de datos con Hibernate Validator. | [Docs](https://quarkus.io/guides/validation) |
+| **Quarkus SmallRye OpenAPI** | Generación automática de documentación OpenAPI. | [Docs](https://quarkus.io/guides/openapi-swaggerui) |
+| **Quarkus Swagger UI** | Interfaz gráfica para probar los endpoints. | [Docs](https://quarkus.io/guides/openapi-swaggerui) |
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+---
 
-## Related Guides
+## 🧪 **Dependencias de Pruebas**
+| Dependencia | Descripción | Documentación |
+|------------|-------------|---------------|
+| **Quarkus JUnit 5** | Pruebas con JUnit 5 en Quarkus. | [Docs](https://quarkus.io/guides/getting-started-testing) |
+| **Mockito Core** | Framework para simulación de objetos en pruebas. | [Docs](https://site.mockito.org/) |
+| **Mockito JUnit Jupiter** | Integración de Mockito con JUnit 5. | [Docs](https://javadoc.io/doc/org.mockito/mockito-junit-jupiter/latest/index.html) |
+| **Rest Assured** | Testing de API REST en Java. | [Docs](https://rest-assured.io/) |
 
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code for Hibernate ORM via the active record or the repository pattern
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
+---
 
-## Provided Code
+---
 
-### Hibernate ORM
+## 📌 **Troubleshooting**
 
-Create your first JPA entity
+### ❌ PostgreSQL Connection Issues?
+- Check logs: `docker logs postgres`
+- Ensure DB is running: `docker ps`
+- Manually restart: `docker restart postgres`
 
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+### ❌ Swagger Not Found?
+- Ensure Quarkus OpenAPI is installed:
+  ```xml
+  <dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-smallrye-openapi</artifactId>
+  </dependency>
+  ```
+- Restart Quarkus: `./mvnw quarkus:dev`
