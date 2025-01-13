@@ -46,6 +46,10 @@ public class ClientService implements IClientService {
 
         clientEntity.demonym = countryService.getDemonymByCountryCode(clientEntity.countryCode);
 
+        if(clientEntity.demonym == null) {
+            throw new NotFoundException("Country not found");
+        }
+
         clientRepository.persist(clientEntity);
 
         return clientEntity;
@@ -70,6 +74,10 @@ public class ClientService implements IClientService {
         clientEntity.setCountryCode(client.countryCode().toUpperCase());
 
         clientEntity.demonym = countryService.getDemonymByCountryCode(client.countryCode());
+
+        if(clientEntity.demonym == null) {
+            throw new NotFoundException("Country not found");
+        }
 
         clientRepository.persist(clientEntity);
 

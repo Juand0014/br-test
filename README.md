@@ -109,7 +109,17 @@ docker run --name postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin 
 - API will be available at **http://localhost:8080**
 
 ### **2️⃣ Run with Docker Compose**
+
+Build the application using docker
+
 ```sh
+# Build and package your project without running tests.
+./mvnw clean package -DskipTests 
+# Build the Docker image using the Quarkus plugin. 
+./mvnw quarkus:image-build  
+# Verify that the image is in Docker with
+docker images
+# Lifting the containers with
 docker compose up --build -d
 ```
 - API: **http://localhost:8080**
