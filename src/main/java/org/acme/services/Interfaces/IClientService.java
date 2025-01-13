@@ -1,16 +1,15 @@
 package org.acme.services.Interfaces;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import org.acme.dto.CreateClientDto;
+import org.acme.dto.UpdateEntityDto;
+import org.acme.entity.ClientEntity;
 
-@RegisterRestClient(configKey = "rest-countries-api")
-@Path("/alpha")
+import java.util.List;
+
 public interface IClientService {
-
-    @GET
-    @Path("/{countryCode}")
-    @Produces(MediaType.APPLICATION_JSON)
-    String getCountryByCode(String countryCode);
+    List<ClientEntity> getClients();
+    ClientEntity addClient(CreateClientDto client);
+    ClientEntity getClientById(Long id);
+    ClientEntity updateClient(Long Id, UpdateEntityDto client);
+    void deleteClient(Long Id);
 }
